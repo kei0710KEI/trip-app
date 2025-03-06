@@ -22,7 +22,7 @@ import {
   AI_PROMPT,
   SelectBudgetOptions,
   SelectTravelesList,
-} from "@/constants/options";
+} from "@/data/data";
 import { chatSession } from "@/service/AIModal";
 
 interface GooglePlaceOption {

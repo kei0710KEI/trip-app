@@ -1,18 +1,8 @@
 "use client";
-
 import Link from "next/link";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 const Hero = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.log("Video autoplay failed:", error);
-      });
-    }
-  }, []);
 
   return (
     <div className="relative w-full h-[120vh] sm:h-[100vh]">
@@ -20,8 +10,7 @@ const Hero = () => {
       <div className="absolute top-0 left-0 w-full h-full bg-gray-800 opacity-70"></div>
       {/* video */}
       <video
-        ref={videoRef}
-        src="/Hero1.mp4"
+        src="/hero1.mp4"
         autoPlay
         muted
         loop
