@@ -1,8 +1,9 @@
 "use client";
 
 import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { TripData } from "@/types/trip";
 
 interface UserTripCardItemProps {
@@ -12,11 +13,7 @@ interface UserTripCardItemProps {
 function UserTripCardItem({ trip }: UserTripCardItemProps) {
   const [photoUrl, setPhotoUrl] = useState<string>();
 
-  useEffect(() => {
-    trip && GetPlacePhoto();
-  }, [trip]);
-
-  const GetPlacePhoto = async () => {
+  const GetPlacePhoto = useCallback(async () => {
     const data = {
       textQuery: trip?.userSelection?.location?.label,
     };
@@ -32,15 +29,23 @@ function UserTripCardItem({ trip }: UserTripCardItemProps) {
     } catch (error) {
       console.error("Error fetching photo:", error);
     }
-  };
+  }, [trip?.userSelection?.location?.label]);
+
+  useEffect(() => {
+    if (trip) {
+      GetPlacePhoto();
+    }
+  }, [trip, GetPlacePhoto]);
 
   return (
     <Link href={`/view-trip/${trip?.id}`}>
       <div className="hover:scale-105 transition-all">
-        <img
+        <Image
           src={photoUrl || "/placeholder.jpg"}
+          alt={trip?.userSelection?.location?.label || "Trip location"}
+          width={400}
+          height={220}
           className="object-cover rounded-xl h-[220px]"
-          alt={trip?.userSelection?.location?.label}
         />
         <div>
           <h2 className="font-bold text-lg">

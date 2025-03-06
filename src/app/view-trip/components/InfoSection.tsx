@@ -2,21 +2,19 @@
 
 import { Button } from "@/components/ui/button";
 import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { IoIosSend } from "react-icons/io";
 import { TripData } from "@/types/trip";
+import Image from "next/image";
 
 interface InfoSectionProps {
   trip: TripData | null;
 }
+
 function InfoSection({ trip }: InfoSectionProps) {
   const [photoUrl, setPhotoUrl] = useState<string>();
 
-  useEffect(() => {
-    trip && GetPlacePhoto();
-  }, [trip]);
-
-  const GetPlacePhoto = async () => {
+  const GetPlacePhoto = useCallback(async () => {
     if (!trip?.userSelection?.location?.label) return;
 
     const data = {
@@ -35,14 +33,22 @@ function InfoSection({ trip }: InfoSectionProps) {
     } catch (error) {
       console.error("Error fetching photo:", error);
     }
-  };
+  }, [trip?.userSelection?.location?.label]);
+
+  useEffect(() => {
+    if (trip) {
+      GetPlacePhoto();
+    }
+  }, [trip, GetPlacePhoto]);
 
   return (
     <div>
-      <img
+      <Image
         src={photoUrl || "/placeholder.jpg"}
-        className="h-[340px] w-full object-cover rounded-xl"
         alt={trip?.userSelection?.location?.label || "Location"}
+        width={1200}
+        height={340}
+        className="h-[340px] w-full object-cover rounded-xl"
       />
 
       <div className="flex justify-between items-center">

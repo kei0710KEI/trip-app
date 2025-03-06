@@ -1,8 +1,9 @@
 "use client";
 
 import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
+import React, { useEffect, useState, useCallback } from "react";
 import { Hotel } from "@/types/trip";
-import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface HotelCardItemProps {
   hotel: Hotel;
@@ -11,11 +12,7 @@ interface HotelCardItemProps {
 function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [photoUrl, setPhotoUrl] = useState<string | undefined>();
 
-  useEffect(() => {
-    hotel && GetPlacePhoto();
-  }, [hotel]);
-
-  const GetPlacePhoto = async () => {
+  const GetPlacePhoto = useCallback(async () => {
     const data = {
       textQuery: hotel.hotelName,
     };
@@ -31,27 +28,38 @@ function HotelCardItem({ hotel }: HotelCardItemProps) {
     } catch (error) {
       console.error("Error fetching photo:", error);
     }
-  };
+  }, [hotel.hotelName]);
+
+  useEffect(() => {
+    if (hotel) {
+      GetPlacePhoto();
+    }
+  }, [hotel, GetPlacePhoto]);
 
   return (
     <a
       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        hotel.hotelName + "," + hotel.hotelAddress
+        hotel.hotelName
       )}`}
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className="hover:scale-105 transition-all cursor-pointer">
-        <img
+      <div
+        className="border rounded-xl p-3 mt-2 flex gap-5 
+        hover:scale-105 transition-all hover:shadow-md cursor-pointer"
+      >
+        <Image
           src={photoUrl || "/placeholder.jpg"}
-          className="rounded-xl h-[180px] w-full object-cover"
           alt={hotel.hotelName}
+          width={130}
+          height={130}
+          className="w-[130px] h-[130px] rounded-xl object-cover"
         />
-        <div className="my-2 flex flex-col gap-2">
-          <h2 className="font-medium">{hotel.hotelName}</h2>
-          <h2 className="text-xs text-gray-500">📍 {hotel.hotelAddress}</h2>
-          <h2 className="text-sm">💰 {hotel.price}</h2>
-          <h2 className="text-sm">⭐ {hotel.rating}</h2>
+        <div>
+          <h2 className="font-bold text-lg">{hotel.hotelName}</h2>
+          <p className="text-sm text-gray-400">{hotel.hotelAddress}</p>
+          <h2 className="mt-2">💰 {hotel.price}</h2>
+          <h2 className="mt-2">⭐ {hotel.rating}</h2>
         </div>
       </div>
     </a>

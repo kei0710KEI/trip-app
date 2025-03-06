@@ -1,11 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
-import React, { useEffect, useState } from "react";
-import { FaMapLocationDot } from "react-icons/fa6";
-import Link from "next/link";
+import React, { useEffect, useState, useCallback } from "react";
 import { Place } from "@/types/trip";
+import Image from "next/image";
 
 interface PlaceCardItemProps {
   place: Place;
@@ -13,11 +11,8 @@ interface PlaceCardItemProps {
 
 function PlaceCardItem({ place }: PlaceCardItemProps) {
   const [photoUrl, setPhotoUrl] = useState<string | undefined>();
-  useEffect(() => {
-    place && GetPlacePhoto();
-  }, [place]);
 
-  const GetPlacePhoto = async () => {
+  const GetPlacePhoto = useCallback(async () => {
     const data = {
       textQuery: place.placeName,
     };
@@ -33,7 +28,13 @@ function PlaceCardItem({ place }: PlaceCardItemProps) {
     } catch (error) {
       console.error("Error fetching photo:", error);
     }
-  };
+  }, [place.placeName]);
+
+  useEffect(() => {
+    if (place) {
+      GetPlacePhoto();
+    }
+  }, [place, GetPlacePhoto]);
 
   return (
     <a
@@ -47,17 +48,18 @@ function PlaceCardItem({ place }: PlaceCardItemProps) {
         className="border rounded-xl p-3 mt-2 flex gap-5 
         hover:scale-105 transition-all hover:shadow-md cursor-pointer"
       >
-        <img
+        <Image
           src={photoUrl || "/placeholder.jpg"}
-          className="w-[130px] h-[130px] rounded-xl object-cover"
           alt={place.placeName}
+          width={130}
+          height={130}
+          className="w-[130px] h-[130px] rounded-xl object-cover"
         />
         <div>
           <h2 className="font-bold text-lg">{place.placeName}</h2>
           <p className="text-sm text-gray-400">{place.placeDetails}</p>
           <h2 className="mt-2">🕙 {place.timeToTravel}</h2>
           <h2 className="mt-2">🎟️ {place.ticketPricing}</h2>
-          {/* <Button size="sm"><FaMapLocationDot /></Button> */}
         </div>
       </div>
     </a>
