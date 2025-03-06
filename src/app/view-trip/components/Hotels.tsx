@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Link } from "react-router-dom";
 import HotelCardItem from "./HotelCardItem";
 import { TripData } from "@/types/trip";
 
