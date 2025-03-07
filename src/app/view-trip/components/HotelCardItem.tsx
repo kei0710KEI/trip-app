@@ -43,23 +43,27 @@ function HotelCardItem({ hotel }: HotelCardItemProps) {
       )}`}
       target="_blank"
       rel="noopener noreferrer"
+      className="block"
     >
-      <div
-        className="border rounded-xl p-3 mt-2 flex gap-5 
-        hover:scale-105 transition-all hover:shadow-md cursor-pointer"
-      >
-        <Image
-          src={photoUrl || "/placeholder.jpg"}
-          alt={hotel.hotelName}
-          width={130}
-          height={130}
-          className="w-[130px] h-[130px] rounded-xl object-cover"
-        />
-        <div>
-          <h2 className="font-bold text-lg">{hotel.hotelName}</h2>
-          <p className="text-sm text-gray-400">{hotel.hotelAddress}</p>
-          <h2 className="mt-2">💰 {hotel.price}</h2>
-          <h2 className="mt-2">⭐ {hotel.rating}</h2>
+      <div className="border rounded-xl overflow-hidden hover:scale-105 transition-all hover:shadow-md cursor-pointer h-full">
+        <div className="relative w-full aspect-[4/3]">
+          <Image
+            src={photoUrl || "/placeholder.jpg"}
+            alt={hotel.hotelName}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+        <div className="p-4">
+          <h2 className="font-bold text-lg line-clamp-1">{hotel.hotelName}</h2>
+          <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+            {hotel.hotelAddress}
+          </p>
+          <div className="flex justify-between items-center mt-3">
+            <span className="text-lg font-semibold">💰 {hotel.price}</span>
+            <span className="text-yellow-600">★ {hotel.rating}</span>
+          </div>
         </div>
       </div>
     </a>

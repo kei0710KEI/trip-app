@@ -13,6 +13,7 @@ import {
   TokenResponse,
 } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
+import { Menu, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ interface UserData {
 function Header() {
   const [user, setUser] = useState<UserData | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -71,11 +73,11 @@ function Header() {
   };
 
   return (
-    <div className="p-3 shadow-sm flex justify-between items-center px-5">
+    <div className="p-3 shadow-sm flex justify-between items-center px-5 relative">
       <a href="/">
-        <img src="/logo.svg" alt="Logo" />
+        <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
       </a>
-      <div>
+      <div className="hidden md:block">
         {user ? (
           <div className="flex items-center gap-3">
             <a href="/create-trip">
@@ -107,6 +109,59 @@ function Header() {
           <Button onClick={() => setOpenDialog(true)}>Sign In</Button>
         )}
       </div>
+
+      {/* モバイルメニュー */}
+      <div className="md:hidden">
+        {user ? (
+          <>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
+            {isMobileMenuOpen && (
+              <div className="absolute top-full right-0 w-full bg-white shadow-lg border-t mt-2 p-4 z-50">
+                <div className="flex flex-col gap-4">
+                  <a href="/create-trip" className="w-full">
+                    <Button variant="outline" className="w-full rounded-full">
+                      + Create Trip
+                    </Button>
+                  </a>
+                  <a href="/my-trip" className="w-full">
+                    <Button variant="outline" className="w-full rounded-full">
+                      My Trips
+                    </Button>
+                  </a>
+                  <div className="flex items-center gap-2 mt-4">
+                    <img
+                      src={user.picture}
+                      className="h-[35px] w-[35px] rounded-full"
+                      alt="User avatar"
+                    />
+                    <span className="text-sm">{user.email}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    className="w-full text-red-500 hover:text-red-600"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <Button onClick={() => setOpenDialog(true)}>Sign In</Button>
+        )}
+      </div>
+
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
           <DialogHeader>

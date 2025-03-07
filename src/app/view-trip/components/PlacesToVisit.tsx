@@ -11,7 +11,7 @@ interface PlacesToVisitProps {
 function PlacesToVisit({ trip }: PlacesToVisitProps) {
   return (
     <div>
-      <h2 className="font-bold text-lg">Places to Visit</h2>
+      <h2 className="font-bold text-2xl mt-10">Places to Visit</h2>
 
       <div>
         {trip?.tripData?.itinerary?.map((item, index) => (

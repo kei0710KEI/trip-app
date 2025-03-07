@@ -70,7 +70,6 @@ function CreateTrip() {
       setOpenDialog(true);
       return;
     }
-
     if (
       (formData.noOfDays && formData.noOfDays > 5 && !formData.location) ||
       !formData.budget ||
