@@ -21,6 +21,11 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import axios from "axios";
+import { db } from "@/service/firebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { UserToken } from "@/types/user";
+import { toast } from "sonner";
+import { Coins } from "lucide-react";
 
 interface UserData {
   picture?: string;
@@ -60,8 +65,27 @@ function Header() {
       localStorage.setItem("user", JSON.stringify(resp.data));
       setUser(resp.data);
       setOpenDialog(false);
+
+      // トークンの初期設定を確認
+      const userTokenRef = doc(db, "userTokens", resp.data.email);
+      const userTokenDoc = await getDoc(userTokenRef);
+
+      if (!userTokenDoc.exists()) {
+        // 初回サインインの場合、50トークンを付与
+        const userToken: UserToken = {
+          email: resp.data.email,
+          tokens: 50,
+          lastUpdated: {
+            seconds: Math.floor(Date.now() / 1000),
+            nanoseconds: 0,
+          },
+        };
+        await setDoc(userTokenRef, userToken);
+        toast.success("Welcome Bonus 50 Tokens Added!");
+      }
     } catch (error) {
       console.error(error);
+      toast.error("Login Failed");
     }
   };
 
@@ -88,6 +112,15 @@ function Header() {
             <a href="/my-trip">
               <Button variant="outline" className="rounded-full">
                 My Trips
+              </Button>
+            </a>
+            <a href="/tokens">
+              <Button
+                variant="outline"
+                className="rounded-full flex items-center gap-2"
+              >
+                <Coins className="h-4 w-4" />
+                Token Management
               </Button>
             </a>
             <Popover>
@@ -136,6 +169,15 @@ function Header() {
                   <a href="/my-trip" className="w-full">
                     <Button variant="outline" className="w-full rounded-full">
                       My Trips
+                    </Button>
+                  </a>
+                  <a href="/tokens" className="w-full">
+                    <Button
+                      variant="outline"
+                      className="w-full rounded-full flex items-center justify-center gap-2"
+                    >
+                      <Coins className="h-4 w-4" />
+                      トークン管理
                     </Button>
                   </a>
                   <div className="flex items-center gap-2 mt-4">
