@@ -105,19 +105,19 @@ function Header() {
         {user ? (
           <div className="flex items-center gap-3">
             <a href="/create-trip">
-              <Button variant="outline" className="rounded-full">
+              <Button variant="outline" className="rounded-full cursor-pointer">
                 + Create Trip
               </Button>
             </a>
             <a href="/my-trip">
-              <Button variant="outline" className="rounded-full">
+              <Button variant="outline" className="rounded-full cursor-pointer">
                 My Trips
               </Button>
             </a>
             <a href="/tokens">
               <Button
                 variant="outline"
-                className="rounded-full flex items-center gap-2"
+                className="rounded-full flex items-center gap-2 cursor-pointer"
               >
                 <Coins className="h-4 w-4" />
                 Token Management

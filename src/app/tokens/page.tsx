@@ -60,7 +60,7 @@ export default function TokensPage() {
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Coins className="h-6 w-6 text-yellow-500" />
+            <Coins className="h-6 w-6" />
             Current Token Balance
           </CardTitle>
         </CardHeader>
@@ -69,6 +69,12 @@ export default function TokensPage() {
             {userTokens?.tokens || 0}
             <span className="text-lg ml-2">Tokens</span>
           </div>
+          {(userTokens?.tokens || 0) < 10 && (
+            <div className="mt-4 p-4 bg-yellow-50 text-yellow-800 rounded-lg">
+              <p>⚠️ 10 tokens are required to generate a trip plan.</p>
+              <p>Please purchase more tokens.</p>
+            </div>
+          )}
           <p className="text-sm text-gray-500 text-center mt-2">
             Last Updated:
             {userTokens?.lastUpdated
@@ -77,7 +83,7 @@ export default function TokensPage() {
           </p>
         </CardContent>
         <CardFooter>
-          <a className="text-blue-500 hover:text-blue-300" href="/token-shop">
+          <a className="text-blue-500 hover:text-blue-300 text-xl" href="/token-shop">
             Need more tokens?
           </a>
         </CardFooter>

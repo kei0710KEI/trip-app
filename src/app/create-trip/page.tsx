@@ -6,6 +6,8 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
+  DialogFooter,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,15 +17,12 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { useRouter } from "next/navigation";
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
 import axios from "axios";
-import {
-  AI_PROMPT,
-  SelectBudgetOptions,
-  SelectTravelesList,
-} from "@/lib/data";
+import { AI_PROMPT, SelectBudgetOptions, SelectTravelesList } from "@/lib/data";
 import { chatSession } from "@/service/AIModal";
+import { Coins } from "lucide-react";
 
 interface GooglePlaceOption {
   label: string;
@@ -42,6 +41,8 @@ function CreateTrip() {
   const [formData, setFormData] = useState<FormData>({});
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [userTokens, setUserTokens] = useState<number | null>(null);
   const router = useRouter();
 
   const handleInputChange = (
@@ -63,6 +64,27 @@ function CreateTrip() {
     onError: (error) => console.log(error),
   });
 
+  const handleGenerateClick = async () => {
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+      setOpenDialog(true);
+      return;
+    }
+
+    const userTokenRef = doc(db, "userTokens", JSON.parse(user).email);
+    const userTokenDoc = await getDoc(userTokenRef);
+
+    if (!userTokenDoc.exists() || userTokenDoc.data().tokens < 10) {
+      toast.error("トークンが不足しています");
+      router.push("/tokens");
+      return;
+    }
+
+    setUserTokens(userTokenDoc.data().tokens);
+    setOpenConfirmDialog(true);
+  };
+
   const OnGenerateTrip = async () => {
     const user = localStorage.getItem("user");
 
@@ -70,6 +92,16 @@ function CreateTrip() {
       setOpenDialog(true);
       return;
     }
+
+    const userTokenRef = doc(db, "userTokens", JSON.parse(user).email);
+    const userTokenDoc = await getDoc(userTokenRef);
+
+    if (!userTokenDoc.exists() || userTokenDoc.data().tokens < 10) {
+      toast.error("You don't have enough tokens");
+      router.push("/tokens");
+      return;
+    }
+
     if (
       (formData.noOfDays && formData.noOfDays > 5 && !formData.location) ||
       !formData.budget ||
@@ -78,8 +110,17 @@ function CreateTrip() {
       toast("Please fill all details");
       return;
     }
-    toast("Please wait...");
 
+    await setDoc(userTokenRef, {
+      ...userTokenDoc.data(),
+      tokens: userTokenDoc.data().tokens - 10,
+      lastUpdated: {
+        seconds: Math.floor(Date.now() / 1000),
+        nanoseconds: 0,
+      },
+    });
+
+    toast("Please wait...");
     setLoading(true);
     const FINAL_PROMPT = AI_PROMPT.replace(
       "{location}",
@@ -142,7 +183,7 @@ function CreateTrip() {
       .then((resp) => {
         localStorage.setItem("user", JSON.stringify(resp.data));
         setOpenDialog(false);
-        OnGenerateTrip();
+        handleGenerateClick();
       })
       .catch((error) => {
         console.error(error);
@@ -236,7 +277,7 @@ function CreateTrip() {
         </div>
       </div>
       <div className="my-10 justify-end flex">
-        <Button disabled={loading} onClick={OnGenerateTrip}>
+        <Button disabled={loading} onClick={handleGenerateClick}>
           {loading ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
           ) : (
@@ -244,6 +285,62 @@ function CreateTrip() {
           )}
         </Button>
       </div>
+
+      <Dialog open={openConfirmDialog} onOpenChange={setOpenConfirmDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+              <Coins className="h-5 w-5 text-yellow-500" />
+              Confirm Token Consumption
+            </DialogTitle>
+            <DialogDescription>
+              <div className="mt-4 space-y-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Consumed Tokens</span>
+                    <span className="font-semibold text-lg">-10 tokens</span>
+                  </div>
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-gray-600">Current Balance</span>
+                    <span className="font-semibold text-lg">
+                      {userTokens} tokens
+                    </span>
+                  </div>
+                  <div className="border-t border-gray-200 my-2" />
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">After Generation</span>
+                    <span className="font-semibold text-lg text-blue-600">
+                      {userTokens ? userTokens - 10 : 0} tokens
+                    </span>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500">
+                  ※ This operation will consume 10 tokens
+                </p>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setOpenConfirmDialog(false)}
+              className="flex-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setOpenConfirmDialog(false);
+                OnGenerateTrip();
+              }}
+              className="flex-1"
+            >
+              Generate
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={openDialog}>
         <DialogContent>
           <DialogHeader>
