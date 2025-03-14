@@ -26,6 +26,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { UserToken } from "@/types/user";
 import { toast } from "sonner";
 import { Coins } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface UserData {
   picture?: string;
@@ -36,6 +37,8 @@ function Header() {
   const [user, setUser] = useState<UserData | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -119,7 +122,7 @@ function Header() {
                 variant="outline"
                 className="rounded-full flex items-center gap-2 cursor-pointer"
               >
-                <Coins className="h-4 w-4" />
+                <Coins className="h-4 w-4 text-yellow-500" />
                 Token Management
               </Button>
             </a>
@@ -146,59 +149,76 @@ function Header() {
       {/* モバイルメニュー */}
       <div className="md:hidden">
         {user ? (
-          <>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
-            {isMobileMenuOpen && (
-              <div className="absolute top-full right-0 w-full bg-white shadow-lg border-t mt-2 p-4 z-50">
-                <div className="flex flex-col gap-4">
-                  <a href="/create-trip" className="w-full">
-                    <Button variant="outline" className="w-full rounded-full">
-                      + Create Trip
-                    </Button>
-                  </a>
-                  <a href="/my-trip" className="w-full">
-                    <Button variant="outline" className="w-full rounded-full">
-                      My Trips
-                    </Button>
-                  </a>
-                  <a href="/tokens" className="w-full">
+          isHomePage ? (
+            <Popover>
+              <PopoverTrigger>
+                <img
+                  src={user.picture}
+                  className="h-[35px] w-[35px] rounded-full"
+                  alt="User avatar"
+                />
+              </PopoverTrigger>
+              <PopoverContent>
+                <h2 className="cursor-pointer" onClick={handleLogout}>
+                  Logout
+                </h2>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </Button>
+              {isMobileMenuOpen && (
+                <div className="absolute top-full right-0 w-full bg-white shadow-lg border-t mt-2 p-4 z-50">
+                  <div className="flex flex-col gap-4">
+                    <a href="/create-trip" className="w-full">
+                      <Button variant="outline" className="w-full rounded-full">
+                        + Create Trip
+                      </Button>
+                    </a>
+                    <a href="/my-trip" className="w-full">
+                      <Button variant="outline" className="w-full rounded-full">
+                        My Trips
+                      </Button>
+                    </a>
+                    <a href="/tokens" className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full rounded-full flex items-center justify-center gap-2"
+                      >
+                        <Coins className="h-4 w-4 text-yellow-500" />
+                        Token Management
+                      </Button>
+                    </a>
+                    <div className="flex items-center gap-2 mt-4">
+                      <img
+                        src={user.picture}
+                        className="h-[35px] w-[35px] rounded-full"
+                        alt="User avatar"
+                      />
+                      <span className="text-sm">{user.email}</span>
+                    </div>
                     <Button
-                      variant="outline"
-                      className="w-full rounded-full flex items-center justify-center gap-2"
+                      variant="ghost"
+                      className="w-full text-red-500 hover:text-red-600"
+                      onClick={handleLogout}
                     >
-                      <Coins className="h-4 w-4" />
-                      トークン管理
+                      Logout
                     </Button>
-                  </a>
-                  <div className="flex items-center gap-2 mt-4">
-                    <img
-                      src={user.picture}
-                      className="h-[35px] w-[35px] rounded-full"
-                      alt="User avatar"
-                    />
-                    <span className="text-sm">{user.email}</span>
                   </div>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-red-500 hover:text-red-600"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
                 </div>
-              </div>
-            )}
-          </>
+              )}
+            </>
+          )
         ) : (
           <Button onClick={() => setOpenDialog(true)}>Sign In</Button>
         )}

@@ -60,7 +60,7 @@ export default function TokensPage() {
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Coins className="h-6 w-6" />
+            <Coins className="h-6 w-6 text-yellow-500" />
             Current Token Balance
           </CardTitle>
         </CardHeader>
