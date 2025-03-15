@@ -23,6 +23,7 @@ import axios from "axios";
 import { AI_PROMPT, SelectBudgetOptions, SelectTravelesList } from "@/lib/data";
 import { chatSession } from "@/service/AIModal";
 import { Coins } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface GooglePlaceOption {
   label: string;
@@ -192,17 +193,37 @@ function CreateTrip() {
   };
 
   return (
-    <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10">
-      <h2 className="font-bold text-3xl">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10"
+    >
+      <motion.h1
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+        className="font-bold text-3xl bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent"
+      >
         Tell us your travel preferences 🏕️🌴
-      </h2>
-      <p className="mt-3 text-gray-500 text-xl">
+      </motion.h1>
+      <motion.p 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3 }}
+        className="mt-3 text-gray-500 text-xl"
+      >
         Just provide some basic information, and our trip planner will generate
         a customized itinerary based on your preferences.
-      </p>
+      </motion.p>
 
       <div className="mt-20 flex flex-col gap-10">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg relative"
+        >
           <h2 className="text-xl my-3 font-medium">
             What is destination of choice?
           </h2>
@@ -216,81 +237,121 @@ function CreateTrip() {
                   handleInputChange("location", v);
                 }
               },
+              className: "transition-all duration-300 hover:shadow-md",
+              styles: {
+                menu: (provided) => ({
+                  ...provided,
+                  position: 'relative',
+                  zIndex: 2
+                })
+              }
             }}
           />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg"
+        >
           <h2 className="text-xl my-3 font-medium">
-            How many days are you planning to travel there?
+            How many days are you planning to travel {place ? `to ${place.label}` : 'there'}?
           </h2>
           <Input
             placeholder="Ex.3"
             type="number"
             min={1}
+            className="transition-all duration-300 hover:shadow-md focus:ring-2 focus:ring-purple-500"
             onChange={(e) =>
               handleInputChange("noOfDays", parseInt(e.target.value, 10))
             }
           />
-        </div>
+        </motion.div>
       </div>
 
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg mt-10"
+      >
         <h2 className="text-xl my-3 font-medium">What is your Budget?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
           {SelectBudgetOptions.map((item, index) => (
-            <div
+            <motion.div
               key={index}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleInputChange("budget", item.title)}
-              className={`p-4 border cursor-pointer 
-            rounded-lg hover:shadow-lg
-            ${formData.budget === item.title && "shadow-lg border-black"}
-            `}
+              className={`p-4 border cursor-pointer rounded-lg transition-all duration-300
+              ${formData.budget === item.title ? 
+                'shadow-lg border-purple-500 bg-purple-50' : 
+                'hover:shadow-lg hover:border-gray-300'}
+              `}
             >
               <h2 className="text-4xl">{item.icon}</h2>
               <h2 className="font-bold text-lg">{item.title}</h2>
               <h2 className="text-sm text-gray-500">{item.desc}</h2>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg mt-10"
+      >
         <h2 className="text-xl my-3 font-medium">
           Who do you plan on traveling with on your next adventure?
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
           {SelectTravelesList.map((item, index) => (
-            <div
+            <motion.div
               key={index}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleInputChange("traveler", item.people)}
-              className={`p-4 border cursor-pointer rounded-lg
-            hover:shadow-lg
-            ${formData.traveler === item.people && "shadow-lg border-black"}
-            `}
+              className={`p-4 border cursor-pointer rounded-lg transition-all duration-300
+              ${formData.traveler === item.people ? 
+                'shadow-lg border-purple-500 bg-purple-50' : 
+                'hover:shadow-lg hover:border-gray-300'}
+              `}
             >
               <h2 className="text-4xl">{item.icon}</h2>
               <h2 className="font-bold text-lg">{item.title}</h2>
               <h2 className="text-sm text-gray-500">{item.desc}</h2>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
-      <div className="my-10 justify-end flex">
-        <Button disabled={loading} onClick={handleGenerateClick}>
+      </motion.div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="my-10 justify-end flex"
+      >
+        <Button 
+          disabled={loading} 
+          onClick={handleGenerateClick}
+          className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
+        >
           {loading ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
           ) : (
             "Generate Trip"
           )}
         </Button>
-      </div>
+      </motion.div>
 
       <Dialog open={openConfirmDialog} onOpenChange={setOpenConfirmDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-              <Coins className="h-5 w-5 text-yellow-500" />
+              <Coins className="h-5 w-5 text-yellow-500 animate-bounce" />
               Confirm Token Consumption
             </DialogTitle>
             <DialogDescription>
@@ -324,7 +385,7 @@ function CreateTrip() {
             <Button
               variant="outline"
               onClick={() => setOpenConfirmDialog(false)}
-              className="flex-1"
+              className="flex-1 hover:bg-gray-100 transition-colors duration-300"
             >
               Cancel
             </Button>
@@ -333,7 +394,7 @@ function CreateTrip() {
                 setOpenConfirmDialog(false);
                 OnGenerateTrip();
               }}
-              className="flex-1"
+              className="flex-1 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
             >
               Generate
             </Button>
@@ -342,25 +403,50 @@ function CreateTrip() {
       </Dialog>
 
       <Dialog open={openDialog}>
-        <DialogContent>
+        <DialogContent className="backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogDescription>
-              <img src="/logo.jpg" alt="Logo" />
-              <h2 className="font-bold text-lg mt-7">Sign In With Google</h2>
-              <p>Sign in to the App with Google authentication securely</p>
-
-              <Button
-                onClick={() => login()}
-                className="w-full mt-5 flex gap-4 items-center"
+              <motion.img 
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.3 }}
+                src="/logo.jpg" 
+                alt="Logo" 
+              />
+              <motion.h2 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="font-bold text-lg mt-7"
               >
-                <FcGoogle className="h-7 w-7" />
-                Sign In with Google
-              </Button>
+                Sign In With Google
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Sign in to the App with Google authentication securely
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <Button
+                  onClick={() => login()}
+                  className="w-full mt-5 flex gap-4 items-center bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
+                >
+                  <FcGoogle className="h-7 w-7" />
+                  Sign In with Google
+                </Button>
+              </motion.div>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }
 
