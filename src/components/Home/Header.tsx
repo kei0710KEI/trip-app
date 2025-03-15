@@ -102,7 +102,7 @@ function Header() {
   return (
     <div className="p-3 shadow-sm flex justify-between items-center px-5 relative">
       <a href="/">
-        <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
+        <img src="/logo.jpg" alt="Logo" className="h-12 w-auto scale-200" />
       </a>
       <div className="hidden md:block">
         {user ? (
@@ -228,7 +228,7 @@ function Header() {
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
-              <img src="/logo.svg" alt="Logo" />
+              <img src="/logo.jpg" alt="Logo" className="h-12 w-auto scale-200" />
               <h2 className="font-bold text-lg mt-7">Sign In With Google</h2>
               <p>Sign in to the App with Google authentication securely</p>
 
