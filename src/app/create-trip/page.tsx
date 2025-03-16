@@ -45,6 +45,7 @@ function CreateTrip() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [userTokens, setUserTokens] = useState<number | null>(null);
   const router = useRouter();
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const handleInputChange = (
     name: keyof FormData,
@@ -127,7 +128,6 @@ function CreateTrip() {
       "{location}",
       formData.location?.label || ""
     )
-      .replace("{totalDays}", formData.noOfDays?.toString() || "")
       .replace("{traveler}", formData.traveler || "")
       .replace("{budget}", formData.budget || "")
       .replace("{totalDays}", formData.noOfDays?.toString() || "");
@@ -192,8 +192,12 @@ function CreateTrip() {
       });
   };
 
+  const handleSectionClick = (section: string) => {
+    setActiveSection(section);
+  };
+
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -207,7 +211,7 @@ function CreateTrip() {
       >
         Tell us your travel preferences 🏕️🌴
       </motion.h1>
-      <motion.p 
+      <motion.p
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.3 }}
@@ -223,9 +227,14 @@ function CreateTrip() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg relative"
+          onClick={() => handleSectionClick("location")}
         >
-          <h2 className="text-xl my-3 font-medium">
-            What is destination of choice?
+          <h2
+            className={`text-xl my-3 font-medium ${
+              activeSection === "location" ? "animate-bounce" : ""
+            }`}
+          >
+            Where would you like to travel?
           </h2>
           <GooglePlacesAutocomplete
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACE_API_KEY}
@@ -235,16 +244,18 @@ function CreateTrip() {
                 if (v) {
                   setPlace(v);
                   handleInputChange("location", v);
+                  setActiveSection(null);
                 }
               },
+              onFocus: () => handleSectionClick("location"),
               className: "transition-all duration-300 hover:shadow-md",
               styles: {
                 menu: (provided) => ({
                   ...provided,
-                  position: 'relative',
-                  zIndex: 2
-                })
-              }
+                  position: "relative",
+                  zIndex: 2,
+                }),
+              },
             }}
           />
         </motion.div>
@@ -254,18 +265,26 @@ function CreateTrip() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
           className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg"
+          onClick={() => handleSectionClick("days")}
         >
-          <h2 className="text-xl my-3 font-medium">
-            How many days are you planning to travel {place ? `to ${place.label}` : 'there'}?
+          <h2
+            className={`text-xl my-3 font-medium ${
+              activeSection === "days" ? "animate-bounce" : ""
+            }`}
+          >
+            How many days are you planning to travel{" "}
+            {place ? `to ${place.label}` : "there"}?
           </h2>
           <Input
             placeholder="Ex.3"
             type="number"
             min={1}
             className="transition-all duration-300 hover:shadow-md focus:ring-2 focus:ring-purple-500"
-            onChange={(e) =>
-              handleInputChange("noOfDays", parseInt(e.target.value, 10))
-            }
+            onFocus={() => handleSectionClick("days")}
+            onChange={(e) => {
+              handleInputChange("noOfDays", parseInt(e.target.value, 10));
+              if (e.target.value) setActiveSection(null);
+            }}
           />
         </motion.div>
       </div>
@@ -275,19 +294,31 @@ function CreateTrip() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
         className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg mt-10"
+        onClick={() => handleSectionClick("budget")}
       >
-        <h2 className="text-xl my-3 font-medium">What is your Budget?</h2>
+        <h2
+          className={`text-xl my-3 font-medium ${
+            activeSection === "budget" ? "animate-bounce" : ""
+          }`}
+        >
+          What is your Budget {place ? `to ${place.label}` : ""}?
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
           {SelectBudgetOptions.map((item, index) => (
             <motion.div
               key={index}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => handleInputChange("budget", item.title)}
+              onClick={() => {
+                handleInputChange("budget", item.title);
+                setActiveSection(null);
+              }}
               className={`p-4 border cursor-pointer rounded-lg transition-all duration-300
-              ${formData.budget === item.title ? 
-                'shadow-lg border-purple-500 bg-purple-50' : 
-                'hover:shadow-lg hover:border-gray-300'}
+              ${
+                formData.budget === item.title
+                  ? "shadow-lg border-purple-500 bg-purple-50"
+                  : "hover:shadow-lg hover:border-gray-300"
+              }
               `}
             >
               <h2 className="text-4xl">{item.icon}</h2>
@@ -303,9 +334,14 @@ function CreateTrip() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
         className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg mt-10"
+        onClick={() => handleSectionClick("traveler")}
       >
-        <h2 className="text-xl my-3 font-medium">
-          Who do you plan on traveling with on your next adventure?
+        <h2
+          className={`text-xl my-3 font-medium ${
+            activeSection === "traveler" ? "animate-bounce" : ""
+          }`}
+        >
+          Who are you traveling with?
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
           {SelectTravelesList.map((item, index) => (
@@ -313,11 +349,16 @@ function CreateTrip() {
               key={index}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => handleInputChange("traveler", item.people)}
+              onClick={() => {
+                handleInputChange("traveler", item.people);
+                setActiveSection(null);
+              }}
               className={`p-4 border cursor-pointer rounded-lg transition-all duration-300
-              ${formData.traveler === item.people ? 
-                'shadow-lg border-purple-500 bg-purple-50' : 
-                'hover:shadow-lg hover:border-gray-300'}
+              ${
+                formData.traveler === item.people
+                  ? "shadow-lg border-purple-500 bg-purple-50"
+                  : "hover:shadow-lg hover:border-gray-300"
+              }
               `}
             >
               <h2 className="text-4xl">{item.icon}</h2>
@@ -328,16 +369,16 @@ function CreateTrip() {
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
         className="my-10 justify-end flex"
       >
-        <Button 
-          disabled={loading} 
+        <Button
+          disabled={loading}
           onClick={handleGenerateClick}
-          className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
+          className="cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
         >
           {loading ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
@@ -351,7 +392,7 @@ function CreateTrip() {
         <DialogContent className="sm:max-w-md backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-              <Coins className="h-5 w-5 text-yellow-500 animate-bounce" />
+              <Coins className="h-5 w-5 text-yellow-600 animate-bounce" />
               Confirm Token Consumption
             </DialogTitle>
             <DialogDescription>
@@ -359,7 +400,7 @@ function CreateTrip() {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Consumed Tokens</span>
-                    <span className="font-semibold text-lg">-10 tokens</span>
+                    <span className="font-semibold text-lg text-red-500">-10 tokens</span>
                   </div>
                   <div className="flex justify-between items-center mt-2">
                     <span className="text-gray-600">Current Balance</span>
@@ -375,9 +416,11 @@ function CreateTrip() {
                     </span>
                   </div>
                 </div>
-                <p className="text-sm text-gray-500">
-                  ※ This operation will consume 10 tokens
-                </p>
+                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                  <p className="text-sm text-yellow-700">
+                    ※ This operation will consume 10 tokens. The generated plan will be saved and can be viewed later.
+                  </p>
+                </div>
               </div>
             </DialogDescription>
           </DialogHeader>
@@ -396,7 +439,7 @@ function CreateTrip() {
               }}
               className="flex-1 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
             >
-              Generate
+              Generate Plan
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -406,14 +449,14 @@ function CreateTrip() {
         <DialogContent className="backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogDescription>
-              <motion.img 
+              <motion.img
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3 }}
-                src="/logo.jpg" 
-                alt="Logo" 
+                src="/logo.jpg"
+                alt="Logo"
               />
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
