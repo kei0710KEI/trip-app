@@ -207,9 +207,9 @@ function CreateTrip() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
-        className="font-bold text-3xl bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent"
+        className="text-center font-bold text-3xl bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent"
       >
-        Tell us your travel preferences 🏕️🌴
+        Trip Planner
       </motion.h1>
       <motion.p
         initial={{ opacity: 0, x: -20 }}
@@ -217,8 +217,7 @@ function CreateTrip() {
         transition={{ delay: 0.3 }}
         className="mt-3 text-gray-500 text-xl"
       >
-        Just provide some basic information, and our trip planner will generate
-        a customized itinerary based on your preferences.
+        Please fill in your travel preferences to generate a customized itinerary.
       </motion.p>
 
       <div className="mt-20 flex flex-col gap-10">
@@ -400,7 +399,9 @@ function CreateTrip() {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Consumed Tokens</span>
-                    <span className="font-semibold text-lg text-red-500">-10 tokens</span>
+                    <span className="font-semibold text-lg text-red-500">
+                      -10 tokens
+                    </span>
                   </div>
                   <div className="flex justify-between items-center mt-2">
                     <span className="text-gray-600">Current Balance</span>
@@ -418,7 +419,8 @@ function CreateTrip() {
                 </div>
                 <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
                   <p className="text-sm text-yellow-700">
-                    ※ This operation will consume 10 tokens. The generated plan will be saved and can be viewed later.
+                    ※ This operation will consume 10 tokens. The generated plan
+                    will be saved and can be viewed later.
                   </p>
                 </div>
               </div>
