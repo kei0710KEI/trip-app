@@ -51,12 +51,12 @@ export default function TokensPage() {
       <div className="flex justify-center items-center min-h-[60vh]">
         <motion.div
           animate={{
-            rotate: 360
+            rotate: 360,
           }}
           transition={{
             duration: 1,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full"
         />
@@ -75,17 +75,27 @@ export default function TokensPage() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
-        className="flex justify-center text-3xl font-bold mb-8 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent"
+        className="flex justify-center text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent"
       >
         Token Management
       </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="text-center text-gray-600 mb-8 max-w-2xl mx-auto"
+      >
+        Manage your tokens here. Tokens are required to generate trip plans and
+        access premium features. Purchase more tokens when running low.
+      </motion.p>
 
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.4 }}
       >
-        <Card className="w-full max-w-md mx-auto backdrop-blur-sm bg-white/90 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+        <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-white/90 shadow-xl hover:shadow-2xl transition-shadow duration-300">
           <CardHeader>
             <CardTitle className="flex justify-center gap-2">
               <motion.div
@@ -121,7 +131,9 @@ export default function TokensPage() {
             <p className="text-sm text-gray-500 text-center mt-2">
               Last Updated:
               {userTokens?.lastUpdated
-                ? new Date(userTokens.lastUpdated.seconds * 1000).toLocaleString()
+                ? new Date(
+                    userTokens.lastUpdated.seconds * 1000
+                  ).toLocaleString()
                 : "Not Updated"}
             </p>
           </CardContent>

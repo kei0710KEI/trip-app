@@ -38,9 +38,7 @@ function PlaceCardItem({ place }: PlaceCardItemProps) {
 
   return (
     <a
-      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        place.placeName
-      )}`}
+      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.placeName)}`}
       target="_blank"
       rel="noopener noreferrer"
     >

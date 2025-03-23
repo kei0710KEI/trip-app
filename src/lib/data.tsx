@@ -54,47 +54,56 @@ export const destinationData = [
   {
     id: 1,
     image: "/images/d1.jpg",
-    city: "Tokyo"
+    city: "Tokyo",
+    url: "https://www.google.com/maps/search/Tokyo"
   },
   {
     id: 2,
     image: "/images/d2.jpg",
-    city: "Kyoto"
+    city: "Kyoto",
+    url: "https://www.google.com/maps/search/Kyoto"
   },
   {
     id: 3,
     image: "/images/d3.jpg",
-    city: "Osaka"
+    city: "Osaka",
+    url: "https://www.google.com/maps/search/Osaka"
   },
   {
     id: 4,
     image: "/images/d4.jpg",
-    city: "Sapporo"
+    city: "Sapporo",
+    url: "https://www.google.com/maps/search/Sapporo"
   },
   {
     id: 5,
     image: "/images/d5.jpg",
-    city: "Fukuoka"
+    city: "Fukuoka",
+    url: "https://www.google.com/maps/search/Fukuoka"
   },
   {
     id: 6,
     image: "/images/d6.jpg",
-    city: "Nagoya"
+    city: "Nagoya",
+    url: "https://www.google.com/maps/search/Nagoya"
   },
   {
     id: 7,
     image: "/images/d7.jpg",
-    city: "Okinawa"
+    city: "Okinawa",
+    url: "https://www.google.com/maps/search/Okinawa"
   },
   {
     id: 8,
     image: "/images/d8.jpg",
-    city: "Hiroshima"
+    city: "Hiroshima",
+    url: "https://www.google.com/maps/search/Hiroshima"
   },
   {
     id: 9,
     image: "/images/d9.jpg",
-    city: "Yamanashi"
+    city: "Yamanashi",
+    url: "https://www.google.com/maps/search/Yamanashi"
   },
   
 ];

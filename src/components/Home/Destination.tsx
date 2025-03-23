@@ -37,7 +37,7 @@ const Destination = () => {
           responsive={responsive}
           infinite={true}
           autoPlay={true}
-          autoPlaySpeed={2000}
+          autoPlaySpeed={1000}
           keyBoardControl={true}
           removeArrowOnDeviceType={["mobile"]}
           className="pb-8"
@@ -50,20 +50,21 @@ const Destination = () => {
                   {/* overlay */}
                   <div className="absolute inset-0 bg-black opacity-25 group-hover:opacity-20 transition-opacity rounded-lg"></div>
                   {/* image */}
-                  <Image
-                    src={data.image}
-                    alt={data.city}
-                    width={500}
-                    height={500}
-                    className="h-full w-full object-cover rounded-lg transform group-hover:scale-110 transition-transform duration-300"
-                  />
+                  <a href={data.url} target="_blank" rel="noopener noreferrer">
+                    <Image
+                      src={data.image}
+                      alt={data.city}
+                      width={500}
+                      height={500}
+                      className="h-full w-full object-cover rounded-lg transform group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </a>
                   {/* text content */}
                 </div>
                 <div className="mt-4 text-center">
                   <h1 className="text-lg sm:text-xl font-semibold">
                     {data.city}
                   </h1>
-                  
                 </div>
               </div>
             );
