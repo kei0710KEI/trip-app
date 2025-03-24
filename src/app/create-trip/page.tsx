@@ -13,14 +13,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { useRouter } from "next/navigation";
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
 import axios from "axios";
-import { AI_PROMPT, SelectBudgetOptions, SelectTravelesList } from "@/lib/data";
+import {
+  AI_PROMPT,
+  SelectBudgetOptions,
+  SelectTravelesList,
+  JapaneseCities,
+} from "@/lib/data";
 import { chatSession } from "@/service/AIModal";
 import { Coins } from "lucide-react";
 import { motion } from "framer-motion";
@@ -46,6 +50,8 @@ function CreateTrip() {
   const [userTokens, setUserTokens] = useState<number | null>(null);
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleInputChange = (
     name: keyof FormData,
@@ -78,7 +84,7 @@ function CreateTrip() {
     const userTokenDoc = await getDoc(userTokenRef);
 
     if (!userTokenDoc.exists() || userTokenDoc.data().tokens < 10) {
-      toast.error("トークンが不足しています");
+      toast.error("You don't have enough tokens");
       router.push("/tokens");
       return;
     }
@@ -196,6 +202,10 @@ function CreateTrip() {
     setActiveSection(section);
   };
 
+  const filteredCities = JapaneseCities[0].filter((city) =>
+    city.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -215,9 +225,10 @@ function CreateTrip() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.3 }}
-        className="mt-3 text-gray-500 text-xl"
+        className="mt-3 text-gray-500 text-xl text-center"
       >
-        Please fill in your travel preferences to generate a customized itinerary.
+        Please fill in your travel preferences to generate a customized
+        itinerary.
       </motion.p>
 
       <div className="mt-20 flex flex-col gap-10">
@@ -225,7 +236,7 @@ function CreateTrip() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg relative"
+          className="backdrop-blur-sm bg-white/30 p-6 rounded-xl shadow-lg relative z-50"
           onClick={() => handleSectionClick("location")}
         >
           <h2
@@ -233,30 +244,50 @@ function CreateTrip() {
               activeSection === "location" ? "animate-bounce" : ""
             }`}
           >
-            Where would you like to travel?
+            Where would you like to travel? 
           </h2>
-          <GooglePlacesAutocomplete
-            apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACE_API_KEY}
-            selectProps={{
-              value: place,
-              onChange: (v: GooglePlaceOption | null) => {
-                if (v) {
-                  setPlace(v);
-                  handleInputChange("location", v);
-                  setActiveSection(null);
-                }
-              },
-              onFocus: () => handleSectionClick("location"),
-              className: "transition-all duration-300 hover:shadow-md",
-              styles: {
-                menu: (provided) => ({
-                  ...provided,
-                  position: "relative",
-                  zIndex: 2,
-                }),
-              },
-            }}
-          />
+          <div className="relative">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => {
+                setIsFocused(true);
+                handleSectionClick("location");
+              }}
+              onBlur={() => {
+                setTimeout(() => setIsFocused(false), 200);
+              }}
+              placeholder="Search for a city..."
+              className="w-full p-2 border rounded transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+
+            {isFocused && filteredCities.length > 0 && (
+              <div className="absolute z-50 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+                {filteredCities.map((city) => (
+                  <div
+                    key={city.value}
+                    className={`p-2 cursor-pointer hover:bg-purple-50 transition-colors duration-150
+                      ${
+                        formData.location?.value === city.value
+                          ? "bg-purple-50"
+                          : ""
+                      }
+                    `}
+                    onClick={() => {
+                      setPlace(city);
+                      handleInputChange("location", city);
+                      setSearchTerm(city.label);
+                      setActiveSection(null);
+                      setIsFocused(false);
+                    }}
+                  >
+                    {city.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </motion.div>
 
         <motion.div

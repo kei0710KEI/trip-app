@@ -112,3 +112,57 @@ export const destinationData = [
 export const AI_PROMPT =
   "Generate Travel Plan for Location : {location}, for {totalDays} Days for {traveler} with a {budget} budget, give me Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and  suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates,Place address, ticket Pricing, Time travel each of the location for {totalDays} days with each day plan with best time to visit in JSON format.";
 
+
+  export const JapaneseCities = [
+    [
+      { label: "Hokkaido (北海道)", value: "hokkaido" },
+      { label: "Aomori (青森)", value: "aomori" },
+      { label: "Iwate (岩手)", value: "iwate" },
+      { label: "Miyagi (宮城)", value: "miyagi" },
+      { label: "Akita (秋田)", value: "akita" },
+      { label: "Yamagata (山形)", value: "yamagata" },
+      { label: "Fukushima (福島)", value: "fukushima" },
+      { label: "Ibaraki (茨城)", value: "ibaraki" },
+      { label: "Tochigi (栃木)", value: "tochigi" },
+      { label: "Gunma (群馬)", value: "gunma" },
+      { label: "Saitama (埼玉)", value: "saitama" },
+      { label: "Chiba (千葉)", value: "chiba" },
+      { label: "Tokyo (東京)", value: "tokyo" },
+      { label: "Kanagawa (神奈川)", value: "kanagawa" },
+      { label: "Niigata (新潟)", value: "niigata" },
+      { label: "Toyama (富山)", value: "toyama" },
+      { label: "Ishikawa (石川)", value: "ishikawa" },
+      { label: "Fukui (福井)", value: "fukui" },
+      { label: "Yamanashi (山梨)", value: "yamanashi" },
+      { label: "Nagano (長野)", value: "nagano" },
+      { label: "Gifu (岐阜)", value: "gifu" },
+      { label: "Shizuoka (静岡)", value: "shizuoka" },
+      { label: "Aichi (愛知)", value: "aichi" },
+      { label: "Mie (三重)", value: "mie" },
+      { label: "Shiga (滋賀)", value: "shiga" },
+      { label: "Kyoto (京都)", value: "kyoto" },
+      { label: "Osaka (大阪)", value: "osaka" },
+      { label: "Hyogo (兵庫)", value: "hyogo" },
+      { label: "Nara (奈良)", value: "nara" },
+      { label: "Wakayama (和歌山)", value: "wakayama" },
+      { label: "Tottori (鳥取)", value: "tottori" },
+      { label: "Shimane (島根)", value: "shimane" },
+      { label: "Okayama (岡山)", value: "okayama" },
+      { label: "Hiroshima (広島)", value: "hiroshima" },
+      { label: "Yamaguchi (山口)", value: "yamaguchi" },
+      { label: "Tokushima (徳島)", value: "tokushima" },
+      { label: "Kagawa (香川)", value: "kagawa" },
+      { label: "Ehime (愛媛)", value: "ehime" },
+      { label: "Kochi (高知)", value: "kochi" },
+      { label: "Fukuoka (福岡)", value: "fukuoka" },
+      { label: "Saga (佐賀)", value: "saga" },
+      { label: "Nagasaki (長崎)", value: "nagasaki" },
+      { label: "Kumamoto (熊本)", value: "kumamoto" },
+      { label: "Oita (大分)", value: "oita" },
+      { label: "Miyazaki (宮崎)", value: "miyazaki" },
+      { label: "Kagoshima (鹿児島)", value: "kagoshima" },
+      { label: "Okinawa (沖縄)", value: "okinawa" },
+      // Add more cities as needed
+      
+    ]    
+  ];
