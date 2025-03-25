@@ -26,38 +26,6 @@ Traveler is a modern travel planning application built with Next.js and TypeScri
   - Lucide React
   - React Icons
 
-## Entity Relationship Diagram
-
-```mermaid
-erDiagram
-    TRIP_DATA ||--o{ DAY_PLAN : contains
-    TRIP_DATA ||--o{ HOTEL : has
-    DAY_PLAN ||--o{ PLACE : includes
-    TRIP_DATA {
-        string id PK
-        string userEmail
-        object userSelection
-        object tripData
-    }
-    DAY_PLAN {
-        string day
-        array plan
-    }
-    PLACE {
-        string time
-        string placeName
-        string placeDetails
-        string timeToTravel
-        string ticketPricing
-    }
-    HOTEL {
-        string hotelName
-        string hotelAddress
-        string price
-        string rating
-    }
-```
-
 ## Setup Instructions
 
 1. Clone the repository
