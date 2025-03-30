@@ -1,131 +1,61 @@
-# Traveler - Travel Planning Application
+# 🗺️ Trip Planner App
 
-## Overview
+旅行プランを簡単に作成・管理できる Web アプリです。  
+47都道府県の観光地情報をチェックし、お気に入りの場所を保存し、オリジナルの旅程を立てることができます。
 
-Traveler is a modern travel planning application built with Next.js and TypeScript. It leverages Google Places API and Generative AI to provide users with personalized travel experiences.
+[▶ アプリを開く](https://trip-app-kei.vercel.app/)
 
-## Key Features
+---
 
-- Google Account Authentication
-- Destination Search and Recommendations
-- AI-Powered Travel Plan Generation
-- Responsive Design
-- Dark Mode Support
+## 🎥 デモ動画
 
-## Tech Stack
+以下はアプリの操作デモ動画です。
 
-- **Framework**: Next.js 15.2.1
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Authentication**: Firebase Authentication
-- **APIs**:
-  - Google Places API
-  - Google Generative AI
-- **UI Components**:
-  - Radix UI
-  - Lucide React
-  - React Icons
+[▶ demo.mp4 を再生する](/demo.mp4)
 
-## Setup Instructions
+<!-- GitHubでは再生されない場合もあります -->
+<video src="/demo.mp4" controls width="100%"></video>
 
-1. Clone the repository
+---
+
+## ✨ 主な機能
+
+- 都道府県ごとの観光地・宿泊施設・移動情報を閲覧
+- お気に入り登録機能（ログインユーザーのみ）
+- マップ上で目的地を選択可能
+- ログイン/ログアウト機能（Firebase Authentication）
+- 旅程をカレンダー形式で表示・管理
+- モダンな UI（shadcn/ui 使用）
+
+---
+
+## 🛠️ 使用技術
+
+- **フレームワーク**: Next.js (App Router)
+- **言語**: TypeScript
+- **スタイリング**: Tailwind CSS, shadcn/ui
+- **認証・データベース**: Firebase (Authentication, Firestore)
+- **ホスティング**: Vercel
+
+---
+
+## ⚙️ セットアップ方法
 
 ```bash
-git clone [repository-url]
-cd traveler
-```
+# リポジトリをクローン
+git clone https://github.com/kei0710KEI/trip-app.git
+cd trip-app
 
-2. Install dependencies
-
-```bash
+# パッケージをインストール
 npm install
-```
 
-3. Configure environment variables
-   Create a `.env.local` file and set the following environment variables:
+# Firebase の環境変数を設定（.env.local）
+NEXT_PUBLIC_FIREBASE_API_KEY=xxxxx
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=xxxxx
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=xxxxx
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=xxxxx
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=xxxxx
+NEXT_PUBLIC_FIREBASE_APP_ID=xxxxx
 
-```
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_MAPS_API_KEY=your_google_maps_api_key
-GOOGLE_AI_API_KEY=your_google_ai_api_key
-```
-
-4. Start the development server
-
-```bash
+# 開発サーバー起動
 npm run dev
-```
-
-## Available Scripts
-
-- `npm run dev`: Start development server (using Turbopack)
-- `npm run build`: Create production build
-- `npm run start`: Start production server
-- `npm run lint`: Run code linting
-
-## Project Structure
-
-```
-traveler/
-├── src/              # Source code
-├── public/           # Static files
-├── components/       # React components
-└── styles/          # Stylesheets
-```
-
-## License
-
-This project is licensed under a private license.
-
-## Contributing
-
-Contributions to the project are welcome. Before submitting a pull request, please follow these steps:
-
-1. Fork this repository
-2. Create a new branch
-3. Commit your changes
-4. Create a pull request
-
-## Support
-
-If you encounter any issues or have questions, please create an Issue.
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-```
-
-```
