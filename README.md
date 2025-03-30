@@ -9,12 +9,9 @@
 
 ## 🎥 デモ動画
 
-以下はアプリの操作デモ動画です。
+以下はアプリの操作デモ動画です（YouTube「限定公開」）。
 
-[▶ demo.mp4 を再生する](/demo.mp4)
-
-<!-- GitHubでは再生されない場合もあります -->
-<video src="/demo.mp4" controls width="100%"></video>
+[▶ YouTubeでデモを見る](https://youtu.be/your-video-id)
 
 ---
 
@@ -25,7 +22,7 @@
 - マップ上で目的地を選択可能
 - ログイン/ログアウト機能（Firebase Authentication）
 - 旅程をカレンダー形式で表示・管理
-- モダンな UI（shadcn/ui 使用）
+- モダンで直感的な UI（shadcn/ui 使用）
 
 ---
 
